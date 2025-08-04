@@ -11,7 +11,7 @@ import (
 
 func main() {
 	contentChan := make(chan FileData)
-	errChan := make(chan error, 5)
+	errChan := make(chan error, 1)
 
 	go func() {
 		defer func() {
@@ -41,6 +41,7 @@ func main() {
 				err = SaveJSON(content, jsonData)
 				if err != nil {
 					fmt.Printf("error %v\n", err)
+					return
 				}
 			}
 
