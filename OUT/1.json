@@ -1,0 +1,18 @@
+{
+  "model": "gemma3:1b",
+  "messages": [
+    {
+      "role": "system",
+      "content": "Ты — помощник для анализа текстов. Отвечай кратко и по делу."
+    },
+    {
+      "role": "user",
+      "content": "Начало текста: https://geniusmarketing.me/lab/20-primerov-kak-oformit-otzyvy-na-sajte-pod-svoyu-nishu/\r\n\r\n[ 20 примеров, как оформить отзывы на сайте под свою\r\nнишу](https://geniusmarketing.me/lab/20-primerov-kak-oformit-otzyvy-na-sajte-\r\npod-svoyu-nishu/ \"Узнайте, как оформить отзывы на сайте, лендинге или другом\r\nвеб-продукте — увеличьте эффективность взаимодействия со своей аудиторией.\r\nЛичные наблюдения, советы.\") \\n\\nКонец текста."
+    }
+  ],
+  "options": {
+    "temperature": 0.3,
+    "num_ctx": 2048
+  },
+  "stream": false
+}
