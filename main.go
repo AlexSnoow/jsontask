@@ -1,3 +1,23 @@
+/*
+Package main содержит реализацию программы для извлечения, парсинга и сохранения JSON-данных из файлов в директории "IN".
+
+Работа программы:
+1. Создаются два канала: contentChan для передачи данных типа FileData и errChan для ошибок.
+2. Запускается горутина, которая:
+  - Вызывает функцию ExtractContent для обработки директории "./IN".
+  - Ловит паники и отправляет ошибки в errChan.
+
+3. Основной поток обрабатывает данные из contentChan:
+  - Парсит JSON с помощью ParseJSON.
+  - Сохраняет результат в файл через SaveJSON.
+
+4. При возникновении ошибки или закрытии обоих каналов программа завершается.
+
+Примечание:
+- Все ошибки выводятся в stdout.
+- Используется механизм recover для обработки паник.
+- Каналы закрываются после завершения работы.
+*/
 package main
 
 import (
@@ -13,6 +33,7 @@ func main() {
 	contentChan := make(chan FileData)
 	errChan := make(chan error, 1)
 
+	// Горутина для безопасного извлечения данных
 	go func() {
 		defer func() {
 			if r := recover(); r != nil {
@@ -60,12 +81,17 @@ func main() {
 
 }
 
+// FileData представляет данные, извлекаемые из файла.
 type FileData struct {
+	// Поля структуры зависят от реализации ExtractContent
 	Name    string
 	Content string
 }
 
+// ExtractContent извлекает данные из файлов в указанной директории.
+// Отправляет результаты в contentChan и ошибки в errChan.
 func ExtractContent(inDir string, contentChan chan FileData) error {
+	// Реализация зависит от контекста
 	defer close(contentChan)
 
 	err := filepath.WalkDir(inDir, func(path string, d fs.DirEntry, err error) error {
@@ -114,7 +140,9 @@ type Options struct {
 	NumCtx      int     `json:"num_ctx"`
 }
 
+// ParseJSON преобразует сырые данные в структуру JSON.
 func ParseJSON(data FileData) ([]byte, error) {
+	// Реализация зависит от контекста
 	req := Request{
 		Model: "gemma3:1b",
 		Messages: []Message{
@@ -136,7 +164,9 @@ func ParseJSON(data FileData) ([]byte, error) {
 	return jsonData, nil
 }
 
+// SaveJSON сохраняет распарсенные данные в файл.
 func SaveJSON(data FileData, json []byte) error {
+	// Реализация зависит от контекста
 	outputFile := filepath.Join("./OUT", data.Name+".json")
 	err := os.WriteFile(outputFile, json, 0644)
 	if err != nil {
